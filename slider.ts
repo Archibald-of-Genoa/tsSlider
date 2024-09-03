@@ -24,22 +24,27 @@ class Slider {
       this.nextButton.addEventListener("click", () => this.moveSlider('next'));
       this.prevButton.addEventListener("click", () => this.moveSlider('prev'));
 
-      // Добавляем событие 'transitionend' для корректировки позиции и снятия флага перехода
       this.slides.addEventListener('transitionend', () => this.handleTransitionEnd());
 
-      // Устанавливаем начальное смещение слайдов
       this.updateSlider(false);
   }
 
   private moveSlider(direction: "prev" | "next") {
-      if (this.isTransitioning) return; // Если слайдер уже в движении, игнорируем последующие клики
+      if (this.isTransitioning) return; 
 
-      this.isTransitioning = true; // Устанавливаем флаг перехода
+      this.isTransitioning = true; 
 
       if (direction === "prev") {
-          this.currentIndex--;
+          this.currentIndex--; 
       } else {
-          this.currentIndex++;
+          this.currentIndex++; 
+      }
+
+      // Корректируем индекс, если он выходит за пределы
+      if (this.currentIndex > this.totalSlides) {
+          this.currentIndex = 1; // Перемещаем на первый реальный слайд
+      } else if (this.currentIndex < 1) {
+          this.currentIndex = this.totalSlides; // Перемещаем на последний реальный слайд
       }
 
       this.updateSlider();
@@ -57,7 +62,6 @@ class Slider {
   }
 
   private handleTransitionEnd() {
-      // Сбрасываем флаг перехода после завершения CSS-анимации
       this.isTransitioning = false;
 
       if (this.currentIndex === this.totalSlides + 1) { 
